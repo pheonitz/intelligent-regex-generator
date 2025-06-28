@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Intelligent Regex Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .result {
+            background-color: #e8f0fe;
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 5px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🧠 Intelligent Regex Generator</h1>
+
+<h3>Generate Regex from Prompt:</h3>
+<textarea id="promptInput" rows="3" placeholder="Example: Regex for email validation"></textarea>
+<button onclick="generateRegex()">Generate Regex</button>
+
+<div class="result" id="regexOutput"></div>
+
+<h3>Test Regex:</h3>
+<input type="text" id="testString" placeholder="Enter test string (e.g., abc@gmail.com)">
+<button onclick="testRegex()">Test</button>
+
+<div class="result" id="testOutput"></div>
+
+<script>
+    async function generateRegex() {
+        const prompt = document.getElementById('promptInput').value;
+        const outputDiv = document.getElementById('regexOutput');
+        outputDiv.innerHTML = "Generating...";
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/generate?prompt=' + encodeURIComponent(prompt), {
+                method: 'POST'
+            });
+            const data = await response.json();
+            outputDiv.innerHTML = `<strong>Generated Regex:</strong> <pre>${data.regex}</pre>`;
+        } catch (error) {
+            outputDiv.innerHTML = "Error generating regex.";
+        }
+    }
+
+    async function testRegex() {
+        const regexText = document.getElementById('regexOutput').innerText.replace('Generated Regex:', '').trim();
+        const testString = document.getElementById('testString').value;
+        const outputDiv = document.getElementById('testOutput');
+        outputDiv.innerHTML = "Testing...";
+
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/test?regex=${encodeURIComponent(regexText)}&test_string=${encodeURIComponent(testString)}`, {
+                method: 'POST'
+            });
+            const data = await response.json();
+            outputDiv.innerHTML = `<strong>Match Result:</strong> ${data.match ? "✅ Match!" : "❌ No Match."}`;
+        } catch (error) {
+            outputDiv.innerHTML = "Error testing regex.";
+        }
+    }
+</script>
+
+</body>
+</html>
