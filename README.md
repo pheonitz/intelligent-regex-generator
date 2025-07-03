@@ -46,33 +46,3 @@ Copy
 Edit
 git clone https://github.com/yourusername/intelligent-regex-generator.git
 cd intelligent-regex-generator
-2. Create Python Virtual Environment:
-bash
-Copy
-Edit
-python -m venv venv
-venv\Scripts\activate    # On Windows
-# OR
-source venv/bin/activate # On Linux/Mac
-3. Install dependencies:
-bash
-Copy
-Edit
-pip install -r requirements.txt
-4. Setup Gemini API Key:
-Get your Gemini API Key from Google AI Studio:
-👉 https://aistudio.google.com/app/apikey
-
-Create a .env file in project root and add:
-
-ini
-Copy
-Edit
-GEMINI_API_KEY=AIzaXXXXXXXXXXXXXXXXXXXXXXXX
-✅ (Never push this file to GitHub)
-
-5. Run FastAPI server:
-bash
-Copy
-Edit
-uvicorn app.main:app --reload
